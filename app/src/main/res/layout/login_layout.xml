@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <!--cuadro donde estara los edits layout de login-->
+    <androidx.cardview.widget.CardView
+
+        android:layout_marginLeft="5dp"
+        android:layout_width="370dp"
+        android:layout_height="363dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:backgroundTint="#1f2c3e"
+        app:cardCornerRadius="20dp"
+
+
+        app:cardElevation="0dp"> <!-- Opcional, establece la elevación si lo deseas -->
+        <!-- cuadro email -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtLoginEmail"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                android:textColorHint="@color/gray_blued"
+                app:boxCornerRadiusTopStart="15dp"
+                app:boxStrokeColor="@color/gray_blued"
+                app:hintTextColor="@color/gray_blued">
+
+                <com.google.android.material.textfield.TextInputEditText
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/skywhite"
+                    android:textColor="@color/black_blued"
+                    android:hint="@string/email_str"
+                    app:boxStrokeColor="@color/gray_blued"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <!-- cuadro contraseña -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtLoginPassword"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp"
+                app:boxStrokeColor="@color/gray_blued"
+                app:hintTextColor="@color/gray_blued"
+                android:textColorHint="@color/gray_blued"
+                app:passwordToggleDrawable="@android:drawable/ic_menu_view">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/skywhite"
+                    android:hint="@string/psswd_str"
+                    android:inputType="textPassword"
+                    android:textColor="@color/black_blued"
+
+
+                    app:boxStrokeColor="@color/gray_blued" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            android:gravity="center">
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="#a19aea"
+                android:text="@string/login_str"
+                android:textColor="#efeefb" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

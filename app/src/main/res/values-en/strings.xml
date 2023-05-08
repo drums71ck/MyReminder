@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyReminder</string>
+    <string name="email_str">E-mail</string>
+    <string name="psswd_str">Password</string>
+    <string name="login_str">Login</string>
+    <string name="register_str">Register</string>
+    <string name="rg_str">Don\'t have account? Sing up 😁</string>
+</resources>

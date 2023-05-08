@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyReminder</string>
+    <string name="email_str">Correo Electronico</string>
+    <string name="psswd_str">Contraseña</string>
+    <string name="login_str">Acceder</string>
+    <string name="register_str">Registrarse</string>
+    <string name="rg_str">¿No tienes cuenta? Registrate 😁</string>
+</resources>
