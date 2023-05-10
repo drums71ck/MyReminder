@@ -1,5 +1,6 @@
 package com.example.myreminder
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,8 @@ import com.example.myreminder.databinding.ActivityNotesBinding
 class notes : AppCompatActivity() {
 
     private lateinit var binding: ActivityNotesBinding
+    private lateinit var mediaPlayer: MediaPlayer
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,5 +34,28 @@ class notes : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        mediaPlayer = MediaPlayer.create(this,R.raw.click_sound)
+
+        navView.setOnNavigationItemSelectedListener { menuItem ->
+            // Reproducir sonido al presionar un elemento del Navigation Bar
+            mediaPlayer.start()
+
+            when (menuItem.itemId) {
+                R.id.navigation_home -> {
+                    // Lógica para el elemento Home
+                    true
+                }
+                R.id.navigation_dashboard -> {
+                    // Lógica para el elemento Dashboard
+                    true
+                }
+                R.id.navigation_notifications -> {
+                    // Lógica para el elemento Notifications
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }
