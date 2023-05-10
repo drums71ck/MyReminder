@@ -5,4 +5,9 @@
     <string name="login_str">Acceder</string>
     <string name="register_str">Registrarse</string>
     <string name="rg_str">¿No tienes cuenta? Registrate 😁</string>
+    <string name="title_activity_notas">notas</string>
+    <string name="title_home">Notas</string>
+    <string name="title_dashboard">Perfil</string>
+    <string name="title_notifications">Ajustes</string>
+    <string name="title_activity_notes">notes</string>
 </resources>

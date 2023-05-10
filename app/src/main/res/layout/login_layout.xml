@@ -33,7 +33,7 @@
             >
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txtLoginEmail"
+
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -46,7 +46,7 @@
                 app:hintTextColor="@color/gray_blued">
 
                 <com.google.android.material.textfield.TextInputEditText
-
+                    android:id="@+id/txtLoginEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/skywhite"
@@ -64,7 +64,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txtLoginPassword"
+
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -78,6 +78,7 @@
                 app:passwordToggleDrawable="@android:drawable/ic_menu_view">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtLoginPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/skywhite"

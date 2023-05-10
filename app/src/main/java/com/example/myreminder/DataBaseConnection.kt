@@ -1,5 +1,6 @@
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -43,5 +44,14 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         val rowsDeleted = db.delete(TABLE_NAME, null, null)
         db.close()
         return rowsDeleted
+    }
+    fun checkCredentials(email: String, password: String): Boolean {
+        val db = readableDatabase
+        val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_EMAIL = ? AND $COLUMN_PASSWORD = ?"
+        val cursor: Cursor? = db.rawQuery(query, arrayOf(email, password))
+        val matchFound = cursor?.count ?: 0 > 0
+        cursor?.close()
+        db.close()
+        return matchFound
     }
 }

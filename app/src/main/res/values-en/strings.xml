@@ -6,4 +6,9 @@
     <string name="login_str">Login</string>
     <string name="register_str">Register</string>
     <string name="rg_str">Don\'t have account? Sing up 😁</string>
+    <string name="title_activity_notas">notes</string>
+    <string name="title_home">Notes</string>
+    <string name="title_dashboard">Profile</string>
+    <string name="title_notifications">Settings</string>
+    <string name="title_activity_notes">notas</string>
 </resources>
