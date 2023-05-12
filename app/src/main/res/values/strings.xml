@@ -10,4 +10,6 @@
     <string name="title_dashboard">Perfil</string>
     <string name="title_notifications">Ajustes</string>
     <string name="title_activity_notes">notes</string>
+    <string name="str_postIt_tittle">Titulo</string>
+    <string name="str_content_postIt">Escribe tus notas aqui ✍</string>
 </resources>

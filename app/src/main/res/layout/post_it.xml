@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="260dp"
+    android:layout_margin="15dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/post_it_background">
+
+    <EditText
+        android:id="@+id/titleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:hint="@string/str_postIt_tittle"
+        android:textColorHint="@color/black"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/contentEditText"
+        android:layout_width="303dp"
+        android:layout_height="90dp"
+        android:layout_below="@id/titleEditText"
+        android:layout_alignBottom="@+id/containerButton"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="70dp"
+        android:background="@android:color/transparent"
+        android:gravity="start"
+        android:hint="@string/str_content_postIt"
+        android:textColor="@android:color/black"
+        android:textColorHint="@color/black"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/containerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/clockButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_clock" />
+
+        <ImageButton
+            android:id="@+id/colorButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_color" />
+
+        <ImageButton
+            android:id="@+id/textColorButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_text_color" />
+
+    </LinearLayout>
+
+</RelativeLayout>

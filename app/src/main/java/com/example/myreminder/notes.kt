@@ -15,7 +15,6 @@ class notes : AppCompatActivity() {
     private lateinit var binding: ActivityNotesBinding
     private lateinit var mediaPlayer: MediaPlayer
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,7 +34,7 @@ class notes : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        mediaPlayer = MediaPlayer.create(this,R.raw.click_sound)
+        mediaPlayer = MediaPlayer.create(this, R.raw.click_sound)
 
         navView.setOnNavigationItemSelectedListener { menuItem ->
             // Reproducir sonido al presionar un elemento del Navigation Bar
@@ -43,15 +42,18 @@ class notes : AppCompatActivity() {
 
             when (menuItem.itemId) {
                 R.id.navigation_home -> {
-                    // Lógica para el elemento Home
+
+                    navController.navigate(R.id.navigation_home)
                     true
                 }
                 R.id.navigation_dashboard -> {
-                    // Lógica para el elemento Dashboard
+
+                    navController.navigate(R.id.navigation_dashboard)
                     true
                 }
                 R.id.navigation_notifications -> {
-                    // Lógica para el elemento Notifications
+
+                    navController.navigate(R.id.navigation_notifications)
                     true
                 }
                 else -> false
