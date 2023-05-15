@@ -3,7 +3,7 @@
     android:layout_height="260dp"
     android:layout_margin="15dp"
     android:layout_gravity="center_horizontal"
-    android:background="@drawable/post_it_background">
+    android:background="@color/postItBackgroundColor">
 
     <EditText
         android:id="@+id/titleEditText"
@@ -16,6 +16,8 @@
         android:hint="@string/str_postIt_tittle"
         android:textColorHint="@color/black"
         android:textColor="@android:color/black"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:maxLines="1"
         android:textSize="18sp" />
 
     <EditText
@@ -50,6 +52,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/ic_clock" />
 
         <ImageButton
@@ -57,14 +60,25 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/ic_color" />
 
         <ImageButton
             android:id="@+id/textColorButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:foreground="?attr/selectableItemBackground"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_text_color" />
+        <ImageButton
+            android:id="@+id/add_fragment_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="30dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:backgroundTint="@color/blue"
+            android:background="@drawable/ic_notes"
+             />
 
     </LinearLayout>
 
