@@ -56,13 +56,6 @@ class HomeFragment : Fragment() {
         btnAddPostIt = root.findViewById(R.id.add_fragment_button)
         containerPostIt = root.findViewById(R.id.containerPostIt)
 
-        txtTittle.setOnKeyListener { _, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-                txtContent.requestFocus()
-                return@setOnKeyListener true
-            }
-            return@setOnKeyListener false
-        }
 
         // Controladores de click de los botones
         btnColorPicker.setOnClickListener(){
@@ -134,8 +127,8 @@ class HomeFragment : Fragment() {
         }
         textColorButton.setOnClickListener {
 
-                val rnd = Random()
-                val colorT: Int = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
+            val rnd = Random()
+            val colorT: Int = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
 
             txtTittleClone.setTextColor(colorT)
             txtContentClone.setTextColor(colorT)

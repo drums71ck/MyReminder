@@ -12,30 +12,37 @@ import com.google.android.material.textfield.TextInputLayout
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var btnRegister : Button
-    lateinit var btnLogin : Button
-    lateinit var lEmail : TextInputEditText
-    lateinit var lPassword : TextInputEditText
+    lateinit var btnRegister: Button
+    lateinit var btnLogin: Button
+    lateinit var lEmail: TextInputEditText
+    lateinit var lPassword: TextInputEditText
     lateinit var dbHelper: DataBaseConnection
+
+
+    private val WRITE_PERMISSION_REQUEST_CODE = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dbHelper = DataBaseConnection(this)
+
         setContentView(R.layout.activity_main)
         cargarBtn()
 
     }
-    fun cargarBtn(){
+
+    fun cargarBtn() {
         btnRegister = findViewById(R.id.btnRegister)
         btnLogin = findViewById(R.id.btnLogin)
-        btnRegister.setOnClickListener(){
+        btnRegister.setOnClickListener() {
             goToRegister()
         }
-        btnLogin.setOnClickListener(){
+        btnLogin.setOnClickListener() {
             checkEmailAndPassword()
         }
 
     }
+
 
     private fun checkEmailAndPassword() {
         lEmail = findViewById(R.id.txtLoginEmail)
@@ -48,19 +55,17 @@ class MainActivity : AppCompatActivity() {
 
         dbHelper.readableDatabase
 
-        val checkEmail = dbHelper.checkCredentials(email,password)
+        val checkEmail = dbHelper.checkCredentials(email, password)
 
-        if(checkEmail){
+        if (checkEmail) {
             lInputEmail.isErrorEnabled = false
-            Toast.makeText(this, "Session succesfull!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Session succesfull!", Toast.LENGTH_SHORT).show()
             goToNotes()
         } else {
             lInputEmail.isErrorEnabled = true
             lInputEmail.error = "error the email o password is wrong!"
-            Toast.makeText(this, "error the email o password is wrong!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "error the email o password is wrong!", Toast.LENGTH_SHORT).show()
         }
-
-
 
 
     }
@@ -69,8 +74,10 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, Register::class.java)
         startActivity(intent)
     }
-    private fun goToNotes(){
+
+    private fun goToNotes() {
         val intent = Intent(this, notes::class.java)
         startActivity(intent)
     }
+
 }
