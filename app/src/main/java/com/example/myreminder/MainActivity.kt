@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dbHelper = DataBaseConnection(this)
-
+        //dbHelper.deleteAllPostIt()
         setContentView(R.layout.activity_main)
         cargarBtn()
 

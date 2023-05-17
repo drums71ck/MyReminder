@@ -1,10 +1,12 @@
 package com.example.myreminder.ui.home
 
+import DataBaseConnection
 import android.graphics.Color
-import android.media.Image
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
+import android.widget.Toast
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +34,7 @@ class HomeFragment : Fragment() {
     lateinit var txtTittle: EditText
     lateinit var txtContent: EditText
     lateinit var containerPostIt : LinearLayout
+    lateinit var dbHelper: DataBaseConnection
     private var postItCount = 0
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -56,6 +60,21 @@ class HomeFragment : Fragment() {
         btnAddPostIt = root.findViewById(R.id.add_fragment_button)
         containerPostIt = root.findViewById(R.id.containerPostIt)
 
+        val textWatcher = object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?)
+            {
+                val title = txtTittle.text.toString().trim()
+                val content = txtContent.text.toString().trim()
+
+                btnAddPostIt.isEnabled = title.isNotEmpty() && content.isNotEmpty()
+            }
+        }
+        txtTittle.addTextChangedListener(textWatcher)
+        txtContent.addTextChangedListener(textWatcher)
 
         // Controladores de click de los botones
         btnColorPicker.setOnClickListener(){
@@ -65,10 +84,61 @@ class HomeFragment : Fragment() {
             randomTextColor()
         }
         btnAddPostIt.setOnClickListener(){
+            dbHelper = DataBaseConnection(requireContext())
+            val title = txtTittle.text.toString().trim()
+            val content = txtContent.text.toString().trim()
+            val color = (postItLayout.background as ColorDrawable).color
+            val hexColor = String.format("#%06X", 0xFFFFFF and color)
+            val id = dbHelper.insertPostIt(title, content, hexColor)
+            dbHelper.close()
+            val message = if (id != -1L) {
+                "Post-it insertado correctamente con ID: $id"
+            } else {
+                "Error al insertar el post-it"
+            }
             addPostItLayout()
         }
+        loadPostItsFromDatabase()
         return root
     }
+
+    private fun loadPostItsFromDatabase() {
+        val db = DataBaseConnection(requireContext().applicationContext)
+        val postIts = db.getAllPostIts()
+        db.close()
+
+        val inflater = LayoutInflater.from(requireContext())
+
+        for (postIt in postIts) {
+            val postItView = inflater.inflate(R.layout.post_it, containerPostIt, false)
+            val uniqueID = View.generateViewId()
+            postItView.id = uniqueID
+
+            // Configurar los campos de texto con los datos del post-it
+            val txtTittleClone = postItView.findViewById<EditText>(R.id.titleEditText)
+            val txtContentClone = postItView.findViewById<EditText>(R.id.contentEditText)
+            val color = Color.parseColor(postIt.color)
+
+            txtTittleClone.setText(postIt.title)
+            txtContentClone.setText(postIt.content)
+            txtTittleClone.setTextColor(color)
+            txtContentClone.setTextColor(color)
+
+            // Ajustar el tamaño y el espacio del post-it
+            val layoutParams = LinearLayout.LayoutParams(
+                resources.getDimensionPixelSize(R.dimen.post_it_width),
+                resources.getDimensionPixelSize(R.dimen.post_it_height)
+            )
+            layoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.post_it_margin_top)
+            layoutParams.gravity = Gravity.CENTER_HORIZONTAL
+
+            postItView.layoutParams = layoutParams
+
+            // Agregar el post-it al contenedor
+            containerPostIt.addView(postItView)
+        }
+
+}
 
 
 
@@ -114,6 +184,11 @@ class HomeFragment : Fragment() {
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL
 
         postItView.layoutParams = layoutParams
+        val rnd = Random()
+        val colorT: Int = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
+
+        dbHelper = DataBaseConnection(requireContext())
+
 
         // Cargamos los botones creados de cada clone
         val colorButton = postItView.findViewById<ImageButton>(R.id.colorButton)
@@ -121,20 +196,36 @@ class HomeFragment : Fragment() {
         val addButton = postItView.findViewById<ImageButton>(R.id.add_fragment_button)
         val txtTittleClone = postItView.findViewById<EditText>(R.id.titleEditText)
         val txtContentClone = postItView.findViewById<EditText>(R.id.contentEditText)
+        val textWatcher = object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?)
+            {
+                val title = txtTittleClone.text.toString().trim()
+                val content = txtContentClone.text.toString().trim()
+
+                btnAddPostIt.isEnabled = title.isNotEmpty() && content.isNotEmpty()
+            }
+        }
+        txtTittleClone.addTextChangedListener(textWatcher)
+        txtContentClone.addTextChangedListener(textWatcher)
 
         colorButton.setOnClickListener {
             randomColor(postItView as RelativeLayout)
         }
         textColorButton.setOnClickListener {
-
-            val rnd = Random()
-            val colorT: Int = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
-
             txtTittleClone.setTextColor(colorT)
             txtContentClone.setTextColor(colorT)
 
         }
         addButton.setOnClickListener {
+            val title = txtTittleClone.text.toString().trim()
+            val content = txtContentClone.text.toString().trim()
+            val color = "#" + Integer.toHexString(colorT)
+
+            dbHelper.insertPostIt(title, content, color)
             addPostItLayout()
         }
 
