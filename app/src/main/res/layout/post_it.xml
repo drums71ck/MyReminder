@@ -79,6 +79,15 @@
             android:backgroundTint="@color/blue"
             android:background="@drawable/ic_notes"
              />
+        <ImageButton
+            android:id="@+id/btnTrash"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:foreground="?attr/selectableItemBackground"
+
+            android:background="@drawable/ic_trash"
+            />
 
     </LinearLayout>
 

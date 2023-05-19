@@ -4,18 +4,16 @@ import DataBaseConnection
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.PopupWindow
 import android.widget.RelativeLayout
-import android.widget.Toast
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,7 +24,6 @@ import java.util.Random
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-    private var pickerColor : PopupWindow? = null
     lateinit var btnColorPicker : ImageButton
     lateinit var btnTextColor: ImageButton
     lateinit var btnClock: ImageButton
@@ -35,6 +32,7 @@ class HomeFragment : Fragment() {
     lateinit var txtContent: EditText
     lateinit var containerPostIt : LinearLayout
     lateinit var dbHelper: DataBaseConnection
+    lateinit var btnDelete : ImageButton
     private var postItCount = 0
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -59,22 +57,8 @@ class HomeFragment : Fragment() {
         btnTextColor = root.findViewById(R.id.textColorButton)
         btnAddPostIt = root.findViewById(R.id.add_fragment_button)
         containerPostIt = root.findViewById(R.id.containerPostIt)
+        btnDelete = root.findViewById(R.id.btnTrash)
 
-        val textWatcher = object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?)
-            {
-                val title = txtTittle.text.toString().trim()
-                val content = txtContent.text.toString().trim()
-
-                btnAddPostIt.isEnabled = title.isNotEmpty() && content.isNotEmpty()
-            }
-        }
-        txtTittle.addTextChangedListener(textWatcher)
-        txtContent.addTextChangedListener(textWatcher)
 
         // Controladores de click de los botones
         btnColorPicker.setOnClickListener(){
@@ -89,14 +73,17 @@ class HomeFragment : Fragment() {
             val content = txtContent.text.toString().trim()
             val color = (postItLayout.background as ColorDrawable).color
             val hexColor = String.format("#%06X", 0xFFFFFF and color)
-            val id = dbHelper.insertPostIt(title, content, hexColor)
+            val id = dbHelper.insertPostIt(postItLayout.id,title, content, hexColor)
             dbHelper.close()
-            val message = if (id != -1L) {
-                "Post-it insertado correctamente con ID: $id"
-            } else {
-                "Error al insertar el post-it"
-            }
+   
             addPostItLayout()
+        }
+        btnDelete.setOnClickListener(){
+            dbHelper = DataBaseConnection(requireContext())
+
+            dbHelper.deletePostItByTitle(txtTittle.text.toString().trim())
+
+            containerPostIt.removeView(postItLayout)
         }
         loadPostItsFromDatabase()
         return root
@@ -117,12 +104,13 @@ class HomeFragment : Fragment() {
             // Configurar los campos de texto con los datos del post-it
             val txtTittleClone = postItView.findViewById<EditText>(R.id.titleEditText)
             val txtContentClone = postItView.findViewById<EditText>(R.id.contentEditText)
+            val btnDeleteClone = postItView.findViewById<ImageButton>(R.id.btnTrash)
             val color = Color.parseColor(postIt.color)
 
             txtTittleClone.setText(postIt.title)
             txtContentClone.setText(postIt.content)
-            txtTittleClone.setTextColor(color)
-            txtContentClone.setTextColor(color)
+            txtTittleClone.setTextColor(Color.BLACK)
+            postItView.setBackgroundColor(color)
 
             // Ajustar el tamaño y el espacio del post-it
             val layoutParams = LinearLayout.LayoutParams(
@@ -131,9 +119,15 @@ class HomeFragment : Fragment() {
             )
             layoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.post_it_margin_top)
             layoutParams.gravity = Gravity.CENTER_HORIZONTAL
-
             postItView.layoutParams = layoutParams
 
+
+            btnDeleteClone.setOnClickListener(){
+                dbHelper = DataBaseConnection(requireContext())
+                dbHelper.deletePostItByTitle(txtTittleClone.text.toString().trim())
+                containerPostIt.removeView(postItView)
+                Log.d("yo", "pasa pero no funciona")
+            }
             // Agregar el post-it al contenedor
             containerPostIt.addView(postItView)
         }
@@ -171,6 +165,7 @@ class HomeFragment : Fragment() {
         val postItView = inflater.inflate(R.layout.post_it, containerPostIt, false)
         val uniqueID = View.generateViewId()
         postItView.id = uniqueID
+        Log.d("Pepe", uniqueID.toString())
 
         // Obtenemos el layout y tamaño del post IT
         val postItLayout = requireView().findViewById<RelativeLayout>(R.id.postItLayout)
@@ -196,21 +191,7 @@ class HomeFragment : Fragment() {
         val addButton = postItView.findViewById<ImageButton>(R.id.add_fragment_button)
         val txtTittleClone = postItView.findViewById<EditText>(R.id.titleEditText)
         val txtContentClone = postItView.findViewById<EditText>(R.id.contentEditText)
-        val textWatcher = object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?)
-            {
-                val title = txtTittleClone.text.toString().trim()
-                val content = txtContentClone.text.toString().trim()
-
-                btnAddPostIt.isEnabled = title.isNotEmpty() && content.isNotEmpty()
-            }
-        }
-        txtTittleClone.addTextChangedListener(textWatcher)
-        txtContentClone.addTextChangedListener(textWatcher)
+        val btnDelete = postItView.findViewById<ImageButton>(R.id.btnTrash)
 
         colorButton.setOnClickListener {
             randomColor(postItView as RelativeLayout)
@@ -223,10 +204,18 @@ class HomeFragment : Fragment() {
         addButton.setOnClickListener {
             val title = txtTittleClone.text.toString().trim()
             val content = txtContentClone.text.toString().trim()
-            val color = "#" + Integer.toHexString(colorT)
-
-            dbHelper.insertPostIt(title, content, color)
+            val hexColor = String.format("#%06X", 0xFFFFFF and colorT)
+            val id = dbHelper.insertPostIt(uniqueID,title, content, hexColor)
+            dbHelper.close()
             addPostItLayout()
+
+        }
+        btnDelete.setOnClickListener(){
+            dbHelper = DataBaseConnection(requireContext())
+            val noteid = uniqueID
+            Log.d("pepe", noteid.toString())
+            dbHelper.deletePostItByTitle(txtTittleClone.text.toString().trim())
+            containerPostIt.removeView(postItView)
         }
 
         containerPostIt.addView(postItView)

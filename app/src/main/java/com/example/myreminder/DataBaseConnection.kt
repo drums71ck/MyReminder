@@ -1,5 +1,4 @@
 import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -82,8 +81,9 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return rowsDeleted
     }
 
-    fun insertPostIt(title: String, content: String, color: String): Long{
+    fun insertPostIt(id: Int, title: String, content: String, color: String): Long{
         val values = ContentValues()
+        values.put(COLUMN_ID, id)
         values.put(COLUMN_TITLE, title)
         values.put(COLUMN_CONTENT, content)
         values.put(COLUMN_COLOR, color)
@@ -120,6 +120,18 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
 
         return postItList
+    }
+    fun deleteNoteById(noteId: Int): Boolean {
+        val db = this.writableDatabase
+        val affectedRows = db.delete(TABLE_POSTIT_NAME, "$COLUMN_ID = ?", arrayOf(noteId.toString()))
+        db.close()
+        return affectedRows > 0
+    }
+    fun deletePostItByTitle(title: String): Boolean {
+        val db = this.writableDatabase
+        val result = db.delete(TABLE_POSTIT_NAME, "$COLUMN_TITLE = ?", arrayOf(title))
+        db.close()
+        return result != -1
     }
 
 
