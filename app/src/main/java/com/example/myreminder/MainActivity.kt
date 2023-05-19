@@ -18,6 +18,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var lPassword: TextInputEditText
     lateinit var dbHelper: DataBaseConnection
 
+    companion object{
+        lateinit var bestEmail: String
+    }
 
     private val WRITE_PERMISSION_REQUEST_CODE = 1
 
@@ -60,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         if (checkEmail) {
             lInputEmail.isErrorEnabled = false
             Toast.makeText(this, "Session succesfull!", Toast.LENGTH_SHORT).show()
+            bestEmail = email
             goToNotes()
         } else {
             lInputEmail.isErrorEnabled = true

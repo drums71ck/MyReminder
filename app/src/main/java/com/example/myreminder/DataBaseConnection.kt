@@ -3,6 +3,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 
 
@@ -132,6 +133,40 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         val result = db.delete(TABLE_POSTIT_NAME, "$COLUMN_TITLE = ?", arrayOf(title))
         db.close()
         return result != -1
+    }
+
+    /**
+     * Esta funcion trata de recuperar en nickname del usuario en base al email que
+     * tiene que ser unico
+     * @param pasamos por parametro el string email del usuario
+     * @return retornara el nickname buscado
+     */
+    fun getUsernameByEmail(email: String): String?{
+        val db = readableDatabase
+        val query = "SELECT $COLUMN_NICKNAME FROM $TABLE_NAME WHERE $COLUMN_EMAIL = ?"
+        val selectionArgs = arrayOf(email)
+        val cursor = db.rawQuery(query, selectionArgs)
+        var username : String? = null
+        if(cursor.moveToFirst()){
+            username = cursor.getString(cursor.getColumnIndex(COLUMN_NICKNAME))
+        }
+        cursor.close()
+        db.close()
+        return username
+    }
+
+    fun getPasswordByEmail(email: String): String?{
+        val db = readableDatabase
+        val query = "SELECT $COLUMN_PASSWORD FROM $TABLE_NAME WHERE $COLUMN_EMAIL = ?"
+        val selectionArgs = arrayOf(email)
+        val cursor = db.rawQuery(query, selectionArgs)
+        var password: String? = null
+        if(cursor.moveToFirst()){
+            password = cursor.getString(cursor.getColumnIndex(COLUMN_PASSWORD))
+        }
+        cursor.close()
+        db.close()
+        return password
     }
 
 

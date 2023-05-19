@@ -18,7 +18,7 @@
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="5dp"
             android:layout_width="match_parent"
-            android:layout_height="240dp">
+            android:layout_height="180dp">
             <LinearLayout
                 android:backgroundTint="@color/blue"
                 android:orientation="vertical"
@@ -34,15 +34,14 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
-                    android:text="PID"
                     android:textColor="#5C5A5A"
                     android:textSize="13sp"
                     android:textStyle="normal" />
 
                 <View
-                    android:background="#79D6D1D1"
+                    android:background="@color/skywhite"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="3dp"/>
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -59,7 +58,8 @@
                         android:gravity="center"
                         android:textStyle="bold"
                         android:textSize="20sp"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_blued"
+                        android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -78,12 +78,11 @@
                         android:id="@+id/txtEmail"
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
-                        android:layout_marginTop="10dp"
                         android:gravity="center"
                         android:text="Email"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_blued"
                         android:textSize="17sp"
-                        android:textStyle="normal" />
+                        android:textStyle="italic" />
 
                 </LinearLayout>
 

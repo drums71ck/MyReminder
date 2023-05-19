@@ -47,6 +47,7 @@
 
             <include layout="@layout/image"/>
 
+            <include layout="@layout/password_card" />
 
         </LinearLayout>
 

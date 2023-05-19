@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.core.view.isInvisible
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -73,7 +74,7 @@ class HomeFragment : Fragment() {
             val content = txtContent.text.toString().trim()
             val color = (postItLayout.background as ColorDrawable).color
             val hexColor = String.format("#%06X", 0xFFFFFF and color)
-            val id = dbHelper.insertPostIt(postItLayout.id,title, content, hexColor)
+            val id = dbHelper.insertPostIt(postItCount,title, content, hexColor)
             dbHelper.close()
    
             addPostItLayout()
@@ -105,6 +106,7 @@ class HomeFragment : Fragment() {
             val txtTittleClone = postItView.findViewById<EditText>(R.id.titleEditText)
             val txtContentClone = postItView.findViewById<EditText>(R.id.contentEditText)
             val btnDeleteClone = postItView.findViewById<ImageButton>(R.id.btnTrash)
+            val btnaddNotes = postItView.findViewById<ImageButton>(R.id.add_fragment_button)
             val color = Color.parseColor(postIt.color)
 
             txtTittleClone.setText(postIt.title)
@@ -121,6 +123,8 @@ class HomeFragment : Fragment() {
             layoutParams.gravity = Gravity.CENTER_HORIZONTAL
             postItView.layoutParams = layoutParams
 
+            btnaddNotes.isEnabled = false
+            btnaddNotes.visibility = View.INVISIBLE
 
             btnDeleteClone.setOnClickListener(){
                 dbHelper = DataBaseConnection(requireContext())
