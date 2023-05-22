@@ -4,12 +4,15 @@ import DataBaseConnection
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Email
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +25,7 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private lateinit var txtName: TextView
     private lateinit var txtEmail: TextView
-
+    private lateinit var btnUpdatePassword: Button
     private lateinit var btnHidePassword: ImageButton
     private lateinit var btnShowPassword: ImageButton
     private lateinit var passwordEditText: EditText
@@ -44,17 +47,19 @@ class DashboardFragment : Fragment() {
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        // Inicializar Texto
         txtName = root.findViewById(R.id.txtName)
         txtEmail = root.findViewById(R.id.txtEmail)
-
         passwordEditText = root.findViewById(R.id.passwordEditText)
+
+        // Inicializar Botones
+
         btnHidePassword = root.findViewById(R.id.btnHidePassword)
         btnShowPassword = root.findViewById(R.id.btnShowPassword)
+        btnUpdatePassword = root.findViewById(R.id.btnUpdatePass)
 
         init()
-
-
-
 
         return root
     }
@@ -81,15 +86,26 @@ class DashboardFragment : Fragment() {
             btnHidePassword.isVisible = false
             btnShowPassword.isVisible = true
         }
+
     }
 
     private fun chargeDades() {
         var email = MainActivity.bestEmail
         var username = dbHelper.getUsernameByEmail(email)
         var password = dbHelper.getPasswordByEmail(email)
+
         txtName.text = username
         txtEmail.text = email
         passwordEditText.setText(password)
+
+        btnUpdatePassword.setOnClickListener(){
+            val passNew = passwordEditText.text.toString()
+            dbHelper.updatePassword(email,passNew)
+
+        }
+
+
+
     }
 
     override fun onDestroyView() {

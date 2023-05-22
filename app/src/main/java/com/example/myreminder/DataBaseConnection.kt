@@ -168,6 +168,17 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
         return password
     }
+    fun updatePassword(email: String, newPassword: String): Int {
+        val values = ContentValues()
+        values.put(COLUMN_PASSWORD, newPassword)
+
+        val db = this.writableDatabase
+        val rowsAffected = db.update(TABLE_NAME, values, "$COLUMN_EMAIL=?", arrayOf(email))
+        db.close()
+
+        return rowsAffected
+    }
+
 
 
 
