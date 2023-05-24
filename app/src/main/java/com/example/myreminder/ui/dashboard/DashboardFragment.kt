@@ -1,6 +1,7 @@
 package com.example.myreminder.ui.dashboard
 
 import DataBaseConnection
+import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Email
 import android.text.InputType
@@ -17,6 +18,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myreminder.MainActivity
+import com.example.myreminder.Minigame
 import com.example.myreminder.R
 import com.example.myreminder.databinding.FragmentDashboardBinding
 
@@ -28,6 +30,7 @@ class DashboardFragment : Fragment() {
     private lateinit var btnUpdatePassword: Button
     private lateinit var btnHidePassword: ImageButton
     private lateinit var btnShowPassword: ImageButton
+    private lateinit var btnGame: Button
     private lateinit var passwordEditText: EditText
     private lateinit var dbHelper: DataBaseConnection
 
@@ -58,6 +61,7 @@ class DashboardFragment : Fragment() {
         btnHidePassword = root.findViewById(R.id.btnHidePassword)
         btnShowPassword = root.findViewById(R.id.btnShowPassword)
         btnUpdatePassword = root.findViewById(R.id.btnUpdatePass)
+        btnGame = root.findViewById(R.id.btnGame)
 
         init()
 
@@ -85,6 +89,10 @@ class DashboardFragment : Fragment() {
                 InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             btnHidePassword.isVisible = false
             btnShowPassword.isVisible = true
+        }
+        btnGame.setOnClickListener(){
+            val intent = Intent(requireContext(), Minigame::class.java)
+            startActivity(intent)
         }
 
     }

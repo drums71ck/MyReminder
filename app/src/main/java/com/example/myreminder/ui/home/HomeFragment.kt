@@ -1,6 +1,10 @@
 package com.example.myreminder.ui.home
 
 import DataBaseConnection
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,11 +13,24 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.app.TimePickerDialog
+import android.content.Context
+import android.content.pm.PackageManager
+import android.icu.text.CaseMap.Title
+import android.os.Build
+import android.widget.TimePicker
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import java.util.*
 
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isInvisible
 
 import androidx.fragment.app.Fragment
@@ -26,15 +43,22 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     lateinit var btnColorPicker : ImageButton
-    lateinit var btnTextColor: ImageButton
-    lateinit var btnClock: ImageButton
-    lateinit var btnAddPostIt : ImageButton
-    lateinit var txtTittle: EditText
-    lateinit var txtContent: EditText
-    lateinit var containerPostIt : LinearLayout
-    lateinit var dbHelper: DataBaseConnection
-    lateinit var btnDelete : ImageButton
+    private lateinit var btnTextColor: ImageButton
+    private lateinit var btnClock: ImageButton
+    private lateinit var btnAddPostIt : ImageButton
+    private lateinit var txtTittle: EditText
+    private lateinit var txtContent: EditText
+    private lateinit var containerPostIt : LinearLayout
+    private lateinit var dbHelper: DataBaseConnection
+    private lateinit var btnDelete : ImageButton
     private var postItCount = 0
+    private val CHANNEL_ID = "channel_id"
+    private val CHANNEL_NAME = "channelName"
+    private val NOTIFICATION_ID = 1
+    private lateinit var notificacion: NotificationCompat.Builder
+    private var notificationHour: Int = 0
+    private var notificationMinute: Int = 0
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -52,6 +76,7 @@ class HomeFragment : Fragment() {
         val postItLayout = root.findViewById<RelativeLayout>(R.id.postItLayout)
 
         // Definimos variables
+        btnClock = root.findViewById(R.id.clockButton)
         btnColorPicker = root.findViewById(R.id.colorButton)
         txtTittle = root.findViewById(R.id.titleEditText)
         txtContent = root.findViewById(R.id.contentEditText)
@@ -81,13 +106,31 @@ class HomeFragment : Fragment() {
         }
         btnDelete.setOnClickListener(){
             dbHelper = DataBaseConnection(requireContext())
-
             dbHelper.deletePostItByTitle(txtTittle.text.toString().trim())
-
             containerPostIt.removeView(postItLayout)
         }
+        btnClock.setOnClickListener(){
+            val title = txtTittle.text.toString().trim()
+            val content = txtContent.text.toString().trim()
+            showTimePickerDialog(title, content)
+        }
+
+        createNotificationChannel()
         loadPostItsFromDatabase()
         return root
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_HIGH
+
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
+                lightColor = Color.RED
+                enableLights(true)
+            }
+            val manager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
     }
 
     private fun loadPostItsFromDatabase() {
@@ -107,6 +150,7 @@ class HomeFragment : Fragment() {
             val txtContentClone = postItView.findViewById<EditText>(R.id.contentEditText)
             val btnDeleteClone = postItView.findViewById<ImageButton>(R.id.btnTrash)
             val btnaddNotes = postItView.findViewById<ImageButton>(R.id.add_fragment_button)
+            val btnClock = postItView.findViewById<ImageButton>(R.id.clockButton)
             val color = Color.parseColor(postIt.color)
 
             txtTittleClone.setText(postIt.title)
@@ -132,11 +176,37 @@ class HomeFragment : Fragment() {
                 containerPostIt.removeView(postItView)
                 Log.d("yo", "pasa pero no funciona")
             }
+            btnClock.setOnClickListener(){
+                val title = txtTittleClone.text.toString().trim()
+                val content = txtContentClone.text.toString().trim()
+                showTimePickerDialog(title, content)
+            }
             // Agregar el post-it al contenedor
             containerPostIt.addView(postItView)
         }
 
 }
+
+    private fun showTimePickerDialog(title: String, content: String) {
+        val calendar = Calendar.getInstance()
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(
+            requireContext(),
+            { _: TimePicker, hourOfDay: Int, minute: Int ->
+                notificationHour = hourOfDay
+                notificationMinute = minute
+                showNotificationTimeSetToast(title, content)
+            },
+            currentHour,
+            currentMinute,
+            false
+        )
+
+        timePickerDialog.show()
+    }
+
 
 
 
@@ -157,6 +227,45 @@ class HomeFragment : Fragment() {
         txtContent.setTextColor(colorT)
         txtTittle.setTextColor(colorT)
     }
+    @SuppressLint("MissingPermission")
+    private fun showNotificationTimeSetToast(title: String, content: String) {
+        val notificacion = NotificationCompat.Builder(requireContext(), CHANNEL_ID).also {
+            it.setContentTitle(title)
+            it.setContentText(content)
+            it.setSmallIcon(R.drawable.ic_noti)
+            it.priority = NotificationCompat.PRIORITY_HIGH
+        }.build()
+        val notificationManager : NotificationManagerCompat = NotificationManagerCompat.from(requireContext())
+
+        val timeString = String.format("%02d:%02d", notificationHour, notificationMinute)
+        val toastMessage = "La notificación se mostrará a las $timeString"
+        Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
+        val currentTime = Calendar.getInstance()
+        val notificationTime = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, notificationHour)
+            set(Calendar.MINUTE, notificationMinute)
+            set(Calendar.SECOND, 0)
+        }
+
+        if (currentTime >= notificationTime) {
+
+            notificationManager.notify(NOTIFICATION_ID, notificacion)
+        } else {
+            val timer = Timer()
+            timer.schedule(object : TimerTask() {
+                override fun run() {
+                    println("¡Ha llegado la hora programada!")
+
+                    notificationManager.notify(NOTIFICATION_ID, notificacion)
+
+                    timer.cancel()
+                }
+            }, notificationTime.time)
+        }
+
+
+    }
+
 
     /**
      * Esta Función lo que hace en pocas palabras es clonar los atributos del post_it
@@ -196,6 +305,7 @@ class HomeFragment : Fragment() {
         val txtTittleClone = postItView.findViewById<EditText>(R.id.titleEditText)
         val txtContentClone = postItView.findViewById<EditText>(R.id.contentEditText)
         val btnDelete = postItView.findViewById<ImageButton>(R.id.btnTrash)
+        val btnClock = postItView.findViewById<ImageButton>(R.id.clockButton)
 
         colorButton.setOnClickListener {
             randomColor(postItView as RelativeLayout)
@@ -220,6 +330,11 @@ class HomeFragment : Fragment() {
             Log.d("pepe", noteid.toString())
             dbHelper.deletePostItByTitle(txtTittleClone.text.toString().trim())
             containerPostIt.removeView(postItView)
+        }
+        btnClock.setOnClickListener(){
+            val title = txtTittleClone.text.toString().trim()
+            val content = txtContentClone.text.toString().trim()
+            showTimePickerDialog(title, content)
         }
 
         containerPostIt.addView(postItView)

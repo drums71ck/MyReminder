@@ -49,6 +49,14 @@
 
             <include layout="@layout/password_card" />
 
+            <Button
+                android:id="@+id/btnGame"
+                android:text="🎮 MINIGAME"
+                android:backgroundTint="@color/skywhite"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
         </LinearLayout>
 
     </ScrollView>
