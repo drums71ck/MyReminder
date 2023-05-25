@@ -1,7 +1,6 @@
 package com.example.myreminder.ui.home
 
 import DataBaseConnection
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -15,22 +14,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.app.TimePickerDialog
 import android.content.Context
-import android.content.pm.PackageManager
-import android.icu.text.CaseMap.Title
 import android.os.Build
 import android.widget.TimePicker
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import java.util.*
-
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isInvisible
 
 import androidx.fragment.app.Fragment
@@ -227,6 +220,13 @@ class HomeFragment : Fragment() {
         txtContent.setTextColor(colorT)
         txtTittle.setTextColor(colorT)
     }
+
+    /**
+     * TODO
+     *
+     * @param title
+     * @param content
+     */
     @SuppressLint("MissingPermission")
     private fun showNotificationTimeSetToast(title: String, content: String) {
         val notificacion = NotificationCompat.Builder(requireContext(), CHANNEL_ID).also {

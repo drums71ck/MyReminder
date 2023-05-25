@@ -22,8 +22,15 @@ import com.example.myreminder.Minigame
 import com.example.myreminder.R
 import com.example.myreminder.databinding.FragmentDashboardBinding
 
+/**
+ * @author drums71ck
+ * Este fragmento se encargara del perfil
+ * tendra que mostrar el email y nombre del usuario
+ * ademas que tendra un apartado de minijuego por si quiere
+ * aliviar sus problemas pegandole a botonsitos
+ */
 class DashboardFragment : Fragment() {
-
+    // Definimos las pariables
     private var _binding: FragmentDashboardBinding? = null
     private lateinit var txtName: TextView
     private lateinit var txtEmail: TextView
@@ -38,6 +45,16 @@ class DashboardFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    /**
+     * aca es donde inicializaremos todos las
+     * variables del layout del perfil
+     *
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,6 +63,7 @@ class DashboardFragment : Fragment() {
         val dashboardViewModel =
             ViewModelProvider(this).get(DashboardViewModel::class.java)
 
+        // Instanciamos la base de datos
         dbHelper = DataBaseConnection(requireContext())
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
@@ -68,15 +86,25 @@ class DashboardFragment : Fragment() {
         return root
     }
 
+    /**
+     * Sera nuestro main donde cargaremos todas las funciones
+     */
     private fun init() {
         chargeDades()
         chargeButton()
 
     }
 
+    /**
+     * Inicializamos todos los botones y le damos una accion
+     */
     private fun chargeButton() {
         btnHidePassword.isVisible = false
 
+        /*
+        Cada vez que se presione el icono mostrara o escondera la contraseña
+        dependiendo el estado de la misma
+         */
         btnShowPassword.setOnClickListener {
             passwordEditText.inputType =
                 InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
@@ -90,6 +118,7 @@ class DashboardFragment : Fragment() {
             btnHidePassword.isVisible = false
             btnShowPassword.isVisible = true
         }
+        // Mandara al activity de Minigame
         btnGame.setOnClickListener(){
             val intent = Intent(requireContext(), Minigame::class.java)
             startActivity(intent)
@@ -97,6 +126,10 @@ class DashboardFragment : Fragment() {
 
     }
 
+    /**
+     * Esta funcion cargara los string y añadira sus
+     * respectivos valores
+     */
     private fun chargeDades() {
         var email = MainActivity.bestEmail
         var username = dbHelper.getUsernameByEmail(email)

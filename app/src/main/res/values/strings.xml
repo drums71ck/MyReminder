@@ -12,5 +12,9 @@
     <string name="title_activity_notes">notes</string>
     <string name="str_postIt_tittle">Titulo</string>
     <string name="str_content_postIt">Escribe tus notas aqui ✍</string>
-    <string name="title_activity_minigame">Minigame</string>
+    <string name="title_activity_minigame" translatable="false">Minigame</string>
+    <string name="strDropAllNotes">Borrar todas las notas</string>
+    <string name="strDropAccount">Borrar cuenta</string>
+    <string name="strQuestionDrop">¿Estas seguro de eliminar tu cuenta?</string>
+    <string name="strQuestionDescription">Borrarás tu cuenta de la base de datos. No podrás acceder a ella después.</string>
 </resources>

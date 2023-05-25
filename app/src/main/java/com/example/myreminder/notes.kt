@@ -10,6 +10,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.myreminder.databinding.ActivityNotesBinding
 
+
+/**
+ * Esta clase es la controladora de los fragments
+ * de home/dashborad/notification
+ *
+ */
 class notes : AppCompatActivity() {
 
     private lateinit var binding: ActivityNotesBinding

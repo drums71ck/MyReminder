@@ -12,8 +12,16 @@ import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import android.provider.Settings
+
+/**
+ * @author drumstick
+ * Esta clase sera el encargado de verificar los datos,
+ * con la base de datos al loguearse y que pase los filtros
+ *
+ */
 class MainActivity : AppCompatActivity() {
 
+    // Definimos las variables
     lateinit var btnRegister: Button
     lateinit var btnLogin: Button
     lateinit var lEmail: TextInputEditText
@@ -28,6 +36,13 @@ class MainActivity : AppCompatActivity() {
     private val WRITE_PERMISSION_REQUEST_CODE = 1
 
 
+    /**
+     * Aca ademas de instanciar la clase DataBaseConnection
+     * pedimos los permisos de notificación para que el usuario pueda
+     * recibir notificaciones de las notas en el movil
+     *
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dbHelper = DataBaseConnection(this)
@@ -38,6 +53,12 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    /**
+     * esta funcion lo que hace es pedir
+     * el permiso de las notificaciones
+     *
+     */
 
     private fun requestNotificationPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -60,6 +81,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Esta funcion cargara y pondra acciones
+     * a los botones
+     *
+     */
     fun cargarBtn() {
         btnRegister = findViewById(R.id.btnRegister)
         btnLogin = findViewById(R.id.btnLogin)
@@ -73,19 +99,29 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+    /**
+     * Esta función se encargara de verificar si el
+     * email y/o la contraseña coincidan con la base de datos
+     * y los señale
+     */
     private fun checkEmailAndPassword() {
         lEmail = findViewById(R.id.txtLoginEmail)
         lPassword = findViewById(R.id.txtLoginPassword)
 
         val lInputEmail = lEmail.parent.parent as TextInputLayout
 
+        // Pasamos los datos del inputLayout a String
         val email = lEmail.text.toString()
         val password = lPassword.text.toString()
 
+        // Instanciamos la base de datos
         dbHelper.readableDatabase
 
+        // Verificamos que el email y password coincidan con la base de datos
         val checkEmail = dbHelper.checkCredentials(email, password)
 
+        // Si el checkEmail es verdadero que siga al nav bar
         if (checkEmail) {
             lInputEmail.isErrorEnabled = false
             Toast.makeText(this, "Session succesfull!", Toast.LENGTH_SHORT).show()
@@ -100,11 +136,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Función encargada de ir a la ventana Register
+     *
+     */
     private fun goToRegister() {
         val intent = Intent(this, Register::class.java)
         startActivity(intent)
     }
 
+    /**
+     * Función encargada de ir a la ventana Notes
+     *
+     */
     private fun goToNotes() {
         val intent = Intent(this, notes::class.java)
         startActivity(intent)

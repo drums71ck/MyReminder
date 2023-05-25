@@ -13,5 +13,6 @@
     <color name="gray_blued">#5273a6</color>
     <color name="black_blued">#202532</color>
     <color name="postItBackgroundColor">#FFFFCC</color>
+    <color name="red_alert">#FFA01F18</color>
 
 </resources>

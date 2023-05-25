@@ -7,11 +7,17 @@ import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 
 
+/**
+ * Esta clase sera nuestro controlador y conexion a la base
+ * de datos de las tablas y usuarios
+ */
 class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    /**
+     * Esta clase solo se encarga de ser el modelo de la nota
+     */
     class PostIt(val id: Long, val title: String, val content: String, val color: String)
 
     companion object {
-
         private const val DATABASE_NAME = "myReminderDB2"
         private const val DATABASE_VERSION = 1
 
@@ -30,6 +36,10 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     }
 
+    /**
+     * En el onCreate es que cuando se ponga en marcha la app
+     * se creara las tablas (si es que no hay una ya almacenada)
+     */
     override fun onCreate(db: SQLiteDatabase) {
         // Creamos la tabla en la base de datos
         val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_EMAIL VARCHAR(255), " +
@@ -44,28 +54,46 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db!!.execSQL(createPostItQuery)
     }
 
+
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Si hay una actualización de la base de datos, puedes manejarla aquí
     }
 
+    /**
+     * La función insertUser lo que hara pasandole parametros añadira un nuevo usuario
+     * @param email el correo del usuario
+     * @param nickname el nombre del usuario
+     * @param password la contraseña del usuario
+     * @return retornara el id del usuario creado
+     */
     fun insertUser(email: String, nickname: String, password: String): Long {
+        /*
+        Los parametros que se pongan lo guardara y
+        los metera con respecto a su columna
+         */
         val values = ContentValues()
         values.put(COLUMN_EMAIL, email)
         values.put(COLUMN_NICKNAME, nickname)
         values.put(COLUMN_PASSWORD, password)
 
+        // Escribira la base de datos
         val db = this.writableDatabase
         val id = db.insert(TABLE_NAME, null, values)
         db.close()
 
         return id
     }
+
+    /**
+     * Esta función solo se usa si se quiere purgar el server.
+     */
     fun deleteAllUsers(): Int {
         val db = this.writableDatabase
         val rowsDeleted = db.delete(TABLE_NAME, null, null)
         db.close()
         return rowsDeleted
     }
+
     fun checkCredentials(email: String, password: String): Boolean {
         val db = readableDatabase
         val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_EMAIL = ? AND $COLUMN_PASSWORD = ?"
@@ -75,6 +103,14 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
         return matchFound
     }
+    /**
+     * Esta función solo verificara que no haya un correo
+     * ya registrado
+     *
+     * @param email
+     * @param password
+     * @return
+     */
     fun deleteAllPostIt(): Int {
         val db = this.writableDatabase
         val rowsDeleted = db.delete(TABLE_POSTIT_NAME, null, null)
@@ -82,6 +118,15 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return rowsDeleted
     }
 
+    /**
+     * Esta función como el insertUser tomara los parametros para rellenar la
+     * tabla postIt con sus respectivos valores
+     * @param id
+     * @param title
+     * @param content
+     * @param color
+     * @return el id del post it creado
+     */
     fun insertPostIt(id: Int, title: String, content: String, color: String): Long{
         val values = ContentValues()
         values.put(COLUMN_ID, id)
@@ -98,13 +143,22 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     }
 
+    /**
+     * Esta función lo que hace es que obtendra cada post it creado
+     * y la guardara en una list para si hay uno que ya se habia creado
+     * ponerlo en el fragment home
+     *
+     * @return la lista de los post it
+     */
     fun getAllPostIts(): List<PostIt> {
         val postItList = mutableListOf<PostIt>()
 
+        // que selecione todo sobre la tabla post it
         val db = readableDatabase
         val query = "SELECT * FROM $TABLE_POSTIT_NAME"
         val cursor: Cursor? = db.rawQuery(query, null)
 
+        // Obtener los datos de cada tabla
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 val id = cursor.getLong(cursor.getColumnIndex(COLUMN_ID))
@@ -122,21 +176,29 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
         return postItList
     }
-    fun deleteNoteById(noteId: Int): Boolean {
-        val db = this.writableDatabase
-        val affectedRows = db.delete(TABLE_POSTIT_NAME, "$COLUMN_ID = ?", arrayOf(noteId.toString()))
-        db.close()
-        return affectedRows > 0
-    }
+
+    /**
+     * Esta función lo que hara es borrar los datos
+     * del post-it
+     *
+     * @param title
+     * @return
+     */
     fun deletePostItByTitle(title: String): Boolean {
         val db = this.writableDatabase
         val result = db.delete(TABLE_POSTIT_NAME, "$COLUMN_TITLE = ?", arrayOf(title))
         db.close()
         return result != -1
     }
+    fun deleteUserByEmail(email: String): Boolean{
+        val db = this.writableDatabase
+        val result = db.delete(TABLE_NAME, "$COLUMN_EMAIL = ?", arrayOf(email))
+        db.close()
+        return result != -1
+    }
 
     /**
-     * Esta funcion trata de recuperar en nickname del usuario en base al email que
+     * Esta funcion trata de recupe)rar en nickname del usuario en base al email que
      * tiene que ser unico
      * @param pasamos por parametro el string email del usuario
      * @return retornara el nickname buscado
@@ -155,6 +217,15 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return username
     }
 
+    /**
+     * Esta función es obtener el password del usuario
+     * mediante el email ya que no se puede duplicar el email
+     * sera mas facil encontrarlo
+     *
+     * @param email
+     * @return
+     */
+
     fun getPasswordByEmail(email: String): String?{
         val db = readableDatabase
         val query = "SELECT $COLUMN_PASSWORD FROM $TABLE_NAME WHERE $COLUMN_EMAIL = ?"
@@ -168,6 +239,16 @@ class DataBaseConnection(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
         return password
     }
+
+    /**
+     * Esta función esta acompañada con la clase minigame
+     * lo que hace es que por los parametros que recibe
+     * actualizara el password nuevo que puso el usuario
+     *
+     * @param email
+     * @param newPassword
+     * @return
+     */
     fun updatePassword(email: String, newPassword: String): Int {
         val values = ContentValues()
         values.put(COLUMN_PASSWORD, newPassword)

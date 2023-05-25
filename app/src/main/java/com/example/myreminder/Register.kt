@@ -9,7 +9,12 @@ import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-
+/**
+ * Esta clase se trata de obtener los datos
+ * que ponga el usuario y crearlo e insertarlo
+ * en la base de datos
+ *00
+ */
 class Register : AppCompatActivity() {
     // obtenemos los datos de los edits layouts
     lateinit var etEmail : TextInputEditText
@@ -29,8 +34,16 @@ class Register : AppCompatActivity() {
             cargarDatos()
         }
     }
+
+    /**
+     * Esta función sera instanciar los inputLayout
+     * y comvertirlos en string para pder ponerlos
+     * en el insertUser()
+     *
+     */
     fun cargarDatos(){
 
+        // Inicializamos inputs
             etEmail = findViewById(R.id.txtRegisterEmail)
             etNickname = findViewById(R.id.txtRegisterNickname)
             etPassword = findViewById(R.id.txtRegisterPassword)
@@ -38,7 +51,7 @@ class Register : AppCompatActivity() {
             val eInputEmail : TextInputLayout = etEmail.parent.parent as TextInputLayout
             val eInputPassword : TextInputLayout = etPassword.parent.parent as TextInputLayout
 
-
+            // Convertimos los inputs a strings
             val email = etEmail.text.toString()
             val nickname = etNickname.text.toString()
             val password = etPassword.text.toString()
@@ -76,6 +89,14 @@ class Register : AppCompatActivity() {
 
 
     }
+
+    /**
+     * Esta función sera ver que el email que trata de registrar
+     * no estara ya creado
+     *
+     * @param email
+     * @return
+     */
     fun checkEmailDuplicate(email: String): Boolean {
         val db = dbHelper.readableDatabase
         val cursor = db.rawQuery("SELECT COUNT(*) FROM users WHERE email = ?", arrayOf(email))
@@ -90,10 +111,6 @@ class Register : AppCompatActivity() {
     }
 
 
-
-    /**
-     * @param
-     */
 
 
 }

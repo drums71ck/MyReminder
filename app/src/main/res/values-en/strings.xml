@@ -13,4 +13,8 @@
     <string name="title_activity_notes">notas</string>
     <string name="str_postIt_tittle">Tittle</string>
     <string name="str_content_postIt">write your notes here ✍</string>
+    <string name="strDropAllNotes">Drop all notes</string>
+    <string name="strDropAccount">Drop account</string>
+    <string name="strQuestionDrop">you\'re sure to delete your account?</string>
+    <string name="strQuestionDescription">"You will delete your account from the database. You will no longer be able to access it. "</string>
 </resources>
