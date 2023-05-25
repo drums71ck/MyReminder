@@ -17,4 +17,7 @@
     <string name="strDropAccount">Drop account</string>
     <string name="strQuestionDrop">you\'re sure to delete your account?</string>
     <string name="strQuestionDescription">"You will delete your account from the database. You will no longer be able to access it. "</string>
+    <string name="strSaveSession">Remember me</string>
+    <string name="strCloseSession">Close session</string>
+    <string name="strVibrate">Delete vibration</string>
 </resources>

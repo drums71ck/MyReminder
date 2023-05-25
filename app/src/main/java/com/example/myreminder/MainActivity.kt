@@ -7,11 +7,15 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import android.provider.Settings
+import android.util.Log
+import android.widget.CheckBox
 
 /**
  * @author drumstick
@@ -26,13 +30,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var btnLogin: Button
     lateinit var lEmail: TextInputEditText
     lateinit var lPassword: TextInputEditText
+    lateinit var checkBoxSave: CheckBox
     lateinit var dbHelper: DataBaseConnection
     private val NOTIFICATION_PERMISSION_CODE = 1001
 
     companion object{
-        lateinit var bestEmail: String
-    }
+        var bestEmail: String? = null
 
+    }
+    var flagSave: Boolean = false
     private val WRITE_PERMISSION_REQUEST_CODE = 1
 
 
@@ -48,9 +54,45 @@ class MainActivity : AppCompatActivity() {
         dbHelper = DataBaseConnection(this)
        // dbHelper.deleteAllPostIt()
         setContentView(R.layout.activity_main)
-        cargarBtn()
+        checkBoxSave = findViewById(R.id.checkBoxSaveSession)
+        lEmail = findViewById(R.id.txtLoginEmail)
+        chargeBtn()
         requestNotificationPermissions()
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val savedSession = sharedPreferences.getBoolean("saved_session", false)
+        chargeCheckBox()
 
+        if(savedSession){
+            goToNotes()
+        }
+
+
+
+    }
+
+    private fun chargeCheckBox() {
+
+        checkBoxSave.setOnCheckedChangeListener{_, isChecked ->
+
+            //Se ejecutara cuando el checkbox cambie de estado
+            if (isChecked){
+                flagSave = true
+                //saveSession(true, email)
+            } else {
+                flagSave = false
+                //saveSession(false, "")
+            }
+
+        }
+    }
+
+    private fun saveSession(save: Boolean, email: String) {
+        val sharedPreferences = PreferenceManager
+            .getDefaultSharedPreferences(this)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("saved_session", save)
+        editor.putString("email", email)
+        editor.apply()
 
     }
 
@@ -86,7 +128,7 @@ class MainActivity : AppCompatActivity() {
      * a los botones
      *
      */
-    fun cargarBtn() {
+    fun chargeBtn() {
         btnRegister = findViewById(R.id.btnRegister)
         btnLogin = findViewById(R.id.btnLogin)
         btnRegister.setOnClickListener() {
@@ -126,6 +168,13 @@ class MainActivity : AppCompatActivity() {
             lInputEmail.isErrorEnabled = false
             Toast.makeText(this, "Session succesfull!", Toast.LENGTH_SHORT).show()
             bestEmail = email
+            if (flagSave){
+                saveSession(true, bestEmail!!)
+            }else{
+                saveSession(false, "")
+            }
+
+
             goToNotes()
         } else {
             lInputEmail.isErrorEnabled = true

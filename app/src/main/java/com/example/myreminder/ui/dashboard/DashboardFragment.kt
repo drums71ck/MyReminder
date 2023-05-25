@@ -3,7 +3,9 @@ package com.example.myreminder.ui.dashboard
 import DataBaseConnection
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.provider.ContactsContract.CommonDataKinds.Email
+import android.provider.ContactsContract.CommonDataKinds.Nickname
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
@@ -40,6 +42,8 @@ class DashboardFragment : Fragment() {
     private lateinit var btnGame: Button
     private lateinit var passwordEditText: EditText
     private lateinit var dbHelper: DataBaseConnection
+    private lateinit var username: String
+    private lateinit var password: String
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -95,6 +99,7 @@ class DashboardFragment : Fragment() {
 
     }
 
+
     /**
      * Inicializamos todos los botones y le damos una accion
      */
@@ -131,17 +136,33 @@ class DashboardFragment : Fragment() {
      * respectivos valores
      */
     private fun chargeDades() {
-        var email = MainActivity.bestEmail
-        var username = dbHelper.getUsernameByEmail(email)
-        var password = dbHelper.getPasswordByEmail(email)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val savedSession = sharedPreferences.getString("email","")
+        var email = savedSession
+        var emailb = MainActivity.bestEmail
+        if (email != ""){
+            username = dbHelper.getUsernameByEmail(email!!)!!
+            password = dbHelper.getPasswordByEmail(email!!)!!
+            txtEmail.text = email
 
+        }else{
+            username = dbHelper.getUsernameByEmail(emailb!!)!!
+            password = dbHelper.getPasswordByEmail(emailb!!)!!
+            txtEmail.text = emailb
+
+        }
         txtName.text = username
-        txtEmail.text = email
+
         passwordEditText.setText(password)
 
         btnUpdatePassword.setOnClickListener(){
             val passNew = passwordEditText.text.toString()
-            dbHelper.updatePassword(email,passNew)
+            if(email != ""){
+                dbHelper.updatePassword(email!!,passNew)
+            }else{
+                dbHelper.updatePassword(emailb!!,passNew)
+            }
+
 
         }
 

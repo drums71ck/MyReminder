@@ -13,10 +13,12 @@ import android.os.VibratorManager
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageButton
+import android.widget.Switch
 import androidx.annotation.RequiresApi
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.example.myreminder.ui.notifications.NotificationsFragment
 
 /**
  * @author drums71ck
@@ -101,9 +103,7 @@ class Minigame : AppCompatActivity() {
      *ademas de agregar vibracion como feedback al usuario
      *
      */
-    private fun incrementCounter() {
-        counter++
-        counterTextView.text = counter.toString()
+    private fun activeVibrate(){
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (vibrator.hasVibrator()) { // Vibrator availability checking
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -115,6 +115,24 @@ class Minigame : AppCompatActivity() {
             }
         }
     }
+    private fun incrementCounter() {
+        counter++
+        counterTextView.text = counter.toString()
+            if (!NotificationsFragment.flagVibration){
+                activeVibrate()
+            }else{
+                desactiveVibrate()
+            }
+
+
+
+
+    }
+
+    private fun desactiveVibrate() {
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        // Detener cualquier vibración en curso
+        vibrator.cancel()    }
 
     /**
      * Esta función simplemente hara que los botones dupliquen

@@ -8,29 +8,59 @@
     tools:context=".ui.notifications.NotificationsFragment">
 
     <Button
+        android:id="@+id/btnCloseSession"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="280dp"
+        android:backgroundTint="@color/gold"
+        android:text="@string/strCloseSession"
+        android:textColor="@color/black_blued"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/btnDropAllNotes"
-        android:layout_width="179dp"
-        android:layout_height="61dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/red_alert"
         android:text="@string/strDropAllNotes"
         android:textColor="@color/skywhite"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16000003" />
+        app:layout_constraintTop_toBottomOf="@+id/btnCloseSession" />
 
     <Button
         android:id="@+id/btnDropAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
         android:layout_marginTop="32dp"
         android:backgroundTint="@color/red_alert"
         android:text="@string/strDropAccount"
         android:textColor="@color/skywhite"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDropAllNotes" />
+        app:layout_constraintTop_toBottomOf="@+id/btnDropAllNotes"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:id="@+id/switchVibrate"
+        android:layout_width="310dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/strVibrate"
+        android:textColor="@color/skywhite"
+        app:layout_constraintBottom_toTopOf="@+id/btnCloseSession"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.544"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 </androidx.constraintlayout.widget.ConstraintLayout>

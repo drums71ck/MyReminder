@@ -17,4 +17,7 @@
     <string name="strDropAccount">Borrar cuenta</string>
     <string name="strQuestionDrop">¿Estas seguro de eliminar tu cuenta?</string>
     <string name="strQuestionDescription">Borrarás tu cuenta de la base de datos. No podrás acceder a ella después.</string>
+    <string name="strSaveSession">Recuerdame</string>
+    <string name="strCloseSession">Cerrar session</string>
+    <string name="strVibrate">Quitar vibracion</string>
 </resources>
