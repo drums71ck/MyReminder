@@ -68,11 +68,7 @@ class NotificationsFragment : Fragment() {
         switchVibration.isChecked = flagVibration
         switchVibration.setOnCheckedChangeListener() { _, isChecked ->
 
-            if (isChecked){
-                flagVibration = true
-            }else{
-                flagVibration = false
-            }
+            flagVibration = isChecked
         }
 
 

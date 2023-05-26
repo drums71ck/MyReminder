@@ -27,6 +27,7 @@ import com.example.myreminder.ui.notifications.NotificationsFragment
 class Minigame : AppCompatActivity() {
 
     // Definimos las variables
+
     private lateinit var buttonTriangle: ImageButton
     private lateinit var buttonCircle: ImageButton
     private lateinit var buttonSquare: ImageButton
