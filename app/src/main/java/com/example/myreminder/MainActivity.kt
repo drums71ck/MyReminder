@@ -75,13 +75,7 @@ class MainActivity : AppCompatActivity() {
         checkBoxSave.setOnCheckedChangeListener{_, isChecked ->
 
             //Se ejecutara cuando el checkbox cambie de estado
-            if (isChecked){
-                flagSave = true
-                //saveSession(true, email)
-            } else {
-                flagSave = false
-                //saveSession(false, "")
-            }
+            flagSave = isChecked
 
         }
     }

@@ -2,6 +2,7 @@ package com.example.myreminder
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +36,7 @@ class Minigame : AppCompatActivity() {
     private lateinit var counterTextView: TextView
     private lateinit var btnSwOn: ImageButton
     private lateinit var btnSwOff: ImageButton
+    private lateinit var btnNext: ImageButton
     private var mediaPlayerSwOn: MediaPlayer? = null
     private var mediaPlayerSwOff: MediaPlayer? = null
 
@@ -64,6 +66,7 @@ class Minigame : AppCompatActivity() {
         buttonSquare = findViewById(R.id.button_square)
         buttonX = findViewById(R.id.button_x)
         counterTextView = findViewById(R.id.counterTextView)
+        btnNext = findViewById(R.id.btnNext)
 
         mediaPlayerSwOn = MediaPlayer.create(this, R.raw.sw_on)
         mediaPlayerSwOff = MediaPlayer.create(this, R.raw.sw_off)
@@ -85,6 +88,9 @@ class Minigame : AppCompatActivity() {
             btnSwOff.isVisible = true
             btnSwOn.isVisible = false
             mediaPlayerSwOn?.start()
+        }
+        btnNext.setOnClickListener(){
+            goToMinigame2()
         }
 
     }
@@ -176,6 +182,10 @@ class Minigame : AppCompatActivity() {
         super.onDestroy()
         mediaPlayerSwOn?.release()
         mediaPlayerSwOff?.release()
+    }
+    fun goToMinigame2(){
+        val intent = Intent(this, Minigame_2::class.java)
+        startActivity(intent)
     }
 
 }
