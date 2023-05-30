@@ -92,11 +92,25 @@
 
     </RelativeLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/editProfileButton"
+        android:src="@drawable/baseline_person_pin_24"
+        android:elevation="16dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:layout_alignEnd="@+id/profileImageView"
+        android:layout_alignBottom="@+id/profileImageView"
+        android:layout_margin="10dp" />
+
+    <!-- Botón redondo para la foto de perfil -->
     <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/profileImageView"
         android:src="@drawable/pe"
-        android:elevation="15dp"
         android:layout_centerHorizontal="true"
         android:layout_width="98dp"
-        android:layout_height="98dp"
-        />
+        android:layout_height="98dp" />
+    <!-- Botón flotante para editar la foto de perfil -->
+
 </RelativeLayout>

@@ -3,10 +3,7 @@ package com.example.myreminder
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.Toast
 import java.io.IOException
 import java.util.Random
 
@@ -67,6 +64,7 @@ class Minigame_2 : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener { mp ->
             mp.release()
         }
+
 
         try {
             mediaPlayer.setDataSource(resources.openRawResourceFd(randomSoundId))
