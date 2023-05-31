@@ -14,8 +14,11 @@ import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import android.provider.Settings
+import android.text.InputType
 import android.util.Log
 import android.widget.CheckBox
+import android.widget.ImageButton
+import androidx.core.view.isVisible
 
 /**
  * @author drumstick
@@ -31,6 +34,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var lEmail: TextInputEditText
     lateinit var lPassword: TextInputEditText
     lateinit var checkBoxSave: CheckBox
+    lateinit var btnShowP: ImageButton
+    lateinit var btnHideP:ImageButton
     lateinit var dbHelper: DataBaseConnection
     private val NOTIFICATION_PERMISSION_CODE = 1001
 
@@ -56,6 +61,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         checkBoxSave = findViewById(R.id.checkBoxSaveSession)
         lEmail = findViewById(R.id.txtLoginEmail)
+        btnShowP = findViewById(R.id.btnShowP)
+        btnHideP = findViewById(R.id.btnHideP)
         chargeBtn()
         requestNotificationPermissions()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -123,6 +130,7 @@ class MainActivity : AppCompatActivity() {
      *
      */
     fun chargeBtn() {
+        lPassword = findViewById(R.id.txtLoginPassword)
         btnRegister = findViewById(R.id.btnRegister)
         btnLogin = findViewById(R.id.btnLogin)
         btnRegister.setOnClickListener() {
@@ -130,6 +138,20 @@ class MainActivity : AppCompatActivity() {
         }
         btnLogin.setOnClickListener() {
             checkEmailAndPassword()
+        }
+        btnHideP.isVisible = false
+        btnShowP.setOnClickListener {
+            lPassword.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            btnHideP.isVisible = true
+            btnShowP.isVisible = false
+        }
+
+        btnHideP.setOnClickListener {
+            lPassword.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            btnHideP.isVisible = false
+            btnShowP.isVisible = true
         }
 
     }

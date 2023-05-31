@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -137,15 +138,15 @@ class DashboardFragment : Fragment() {
      */
     private fun chargeDades() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        val savedSession = sharedPreferences.getString("email","")
+        val savedSession = sharedPreferences.getString("email", "")
         var email = savedSession
         var emailb = MainActivity.bestEmail
-        if (email != ""){
+        if (email != "") {
             username = dbHelper.getUsernameByEmail(email!!)!!
             password = dbHelper.getPasswordByEmail(email!!)!!
             txtEmail.text = email
 
-        }else{
+        } else {
             username = dbHelper.getUsernameByEmail(emailb!!)!!
             password = dbHelper.getPasswordByEmail(emailb!!)!!
             txtEmail.text = emailb
@@ -155,20 +156,27 @@ class DashboardFragment : Fragment() {
 
         passwordEditText.setText(password)
 
-        btnUpdatePassword.setOnClickListener(){
+        btnUpdatePassword.setOnClickListener {
             val passNew = passwordEditText.text.toString()
-            if(email != ""){
-                dbHelper.updatePassword(email!!,passNew)
-            }else{
-                dbHelper.updatePassword(emailb!!,passNew)
+            val emailToUpdate = email ?: emailb
+
+            if (passNew.length > 5 && password.contains(Regex("[a-zA-Z]"))) {
+                if (emailToUpdate!!.isNotBlank())
+                {
+                    val colorNormal = ContextCompat.getColor(requireContext(), R.color.black)
+                    passwordEditText.setTextColor(colorNormal)
+                    dbHelper.updatePassword(emailToUpdate, passNew)
+                    Toast.makeText(requireContext(),"Success Change",Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                val colorRedAlert = ContextCompat.getColor(requireContext(), R.color.red_alert)
+                passwordEditText.setTextColor(colorRedAlert)
+                Toast.makeText(requireContext(),"Failed",Toast.LENGTH_SHORT).show()
             }
-
-
         }
-
-
-
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
